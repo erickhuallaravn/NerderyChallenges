@@ -1,0 +1,328 @@
+# ------------------------
+# ENUMS
+# ------------------------
+
+enum RowStatus {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+enum CurrencyCode {
+  USD
+  PEN
+  EUR
+}
+
+# ------------------------
+# SCALARS
+# ------------------------
+
+scalar DateTime
+scalar JSON
+scalar Email
+
+# ------------------------
+# TYPES - AUTH
+# ------------------------
+
+type User {
+  user_id: ID!
+  username: String!
+  created_at: DateTime!
+  update_at: DateTime!
+  row_status: RowStatus!
+}
+
+type Role {
+  role_id: ID!
+  name: String!
+  description: String
+  permissions: [String!]!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+  roles: [Role!]!
+}
+
+# ------------------------
+# TYPES - CUSTOMER
+# ------------------------
+
+type Customer {
+  customer_id: ID!
+  user: User!
+  first_name: String!
+  last_name: String!
+  address: String
+  phone_numbers: [String!]!
+  birthday: String
+}
+
+# ------------------------
+# TYPES - PRODUCT
+# ------------------------
+
+type Product {
+  product_id: ID!
+  name: String!
+  description: String
+  row_status: RowStatus!
+  images: [ProductFile!]!
+  variations: [ProductVariation!]!
+}
+
+type ProductVariation {
+  product_variation_id: ID!
+  name: String!
+  price: Float!
+  currency_code: CurrencyCode!
+  available_stock: Int!
+  characteristics: JSON
+  row_status: RowStatus!
+}
+
+type ProductFile {
+  product_file_id: ID!
+  file_extension: String!
+  url_link: String!
+  description: String
+  created_at: DateTime!
+}
+
+# ------------------------
+# TYPES - CART
+# ------------------------
+
+type ShoppingCartHeader {
+  shopping_cart_header_id: ID!
+  name: String!
+  due_date: DateTime
+  customer: Customer!
+  items: [ShoppingCartDetail!]!
+  created_at: DateTime!
+}
+
+type ShoppingCartDetail {
+  shopping_cart_detail_id: ID!
+  product: Product!
+  product_variation: ProductVariation!
+  quantity: Float!
+  discount_percentage: Float!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+# ------------------------
+# TYPES - ORDER
+# ------------------------
+
+type OrderHeader {
+  order_header_id: ID!
+  customer: Customer!
+  serial_number: String!
+  subtotal: Float!
+  created_at: DateTime!
+  row_status: RowStatus!
+  items: [OrderDetail!]!
+  status_logs: [OrderStatusLog!]!
+  payment: OrderPayment
+}
+
+type OrderDetail {
+  order_detail_id: ID!
+  product_name: String!
+  product: Product!
+  product_variation: ProductVariation!
+  quantity: Float!
+  discount_percentage: Float!
+  subtotal: Float!
+  created_at: DateTime!
+  updated_at: DateTime!
+  row_status: RowStatus!
+}
+
+type OrderStatus {
+  order_status_id: ID!
+  name: String!
+  description: String
+  created_at: DateTime!
+  required_status_id: ID
+  row_status: RowStatus!
+}
+
+type OrderStatusLog {
+  order_status_log_id: ID!
+  order_status: OrderStatus!
+  notes: String
+  created_at: DateTime!
+}
+
+type OrderPayment {
+  order_payment_id: ID!
+  stripe_payment_token: String!
+  receipt_url_link: String
+  amount: Float!
+  currency_code: CurrencyCode!
+  status_message: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  row_status: RowStatus!
+}
+
+# ------------------------
+# TYPES - NOTIFICATION
+# ------------------------
+
+type Notification {
+  notification_log_id: ID!
+  reason: String
+  title: String
+  message: String
+  status: String
+  error_message: String
+  created_at: DateTime!
+}
+
+# ------------------------
+# TYPES - DISCOUNT
+# ------------------------
+
+type PromotionalDiscount {
+  promotional_discount_id: ID!
+  discount_percentage: Float!
+  valid_since: DateTime!
+  valid_until: DateTime!
+  available_stock: Int!
+  row_status: RowStatus!
+}
+
+# ------------------------
+# TYPES - STRIPE
+# ------------------------
+
+input CreateStripeCheckoutSessionInput {
+  order_id: ID!
+}
+
+type StripeCheckoutSession {
+  sessionId: String!
+  url: String!
+}
+
+input ConfirmStripePaymentInput {
+  sessionId: String!
+}
+
+type OrderPaymentResult {
+  success: Boolean!
+  payment: OrderPayment
+  message: String
+}
+
+# ------------------------
+# INPUTS
+# ------------------------
+
+input SignUpInput {
+  username: String!
+  password: String!
+  first_name: String!
+  last_name: String!
+  address: String
+  phone_numbers: [String!]!
+  birthday: String
+}
+
+input SignInInput {
+  username: String!
+  password: String!
+}
+
+input CreateProductInput {
+  name: String!
+  description: String
+}
+
+input UpdateProductInput {
+  product_id: ID!
+  name: String
+  description: String
+  row_status: RowStatus
+}
+
+input CreateProductVariationInput {
+  product_id: ID!
+  name: String!
+  price: Float!
+  currency_code: CurrencyCode!
+  available_stock: Int!
+  characteristics: JSON
+}
+
+input UploadProductImageInput {
+  product_id: ID!
+  file_extension: String!
+  url_link: String!
+  description: String
+}
+
+input AddToCartInput {
+  product_variation_id: ID!
+  quantity: Float!
+}
+
+input LikeProductInput {
+  product_variation_id: ID!
+}
+
+# ------------------------
+# QUERIES
+# ------------------------
+
+type Query {
+  me: User
+  getCustomer: Customer
+  listProducts(page: Int, pageSize: Int): [Product!]!
+  searchProductsByCategory(category: String!): [Product!]!
+  productDetails(product_id: ID!): Product
+  getMyOrders: [OrderHeader!]!
+  getClientOrders(customer_id: ID!): [OrderHeader!]!
+  getCart: ShoppingCartHeader
+}
+
+# ------------------------
+# MUTATIONS
+# ------------------------
+
+type Mutation {
+  # Auth
+  signUp(input: SignUpInput!): AuthPayload!
+  signIn(input: SignInInput!): AuthPayload!
+  signOut: Boolean!
+  forgotPassword(email: Email!): Boolean!
+  resetPassword(token: String!, newPassword: String!): Boolean!
+
+  # Manager actions
+  createProduct(input: CreateProductInput!): Product!
+  updateProduct(input: UpdateProductInput!): Product!
+  deleteProduct(product_id: ID!): Boolean!
+  disableProduct(product_id: ID!): Product!
+  uploadProductImage(input: UploadProductImageInput!): ProductFile!
+
+  # Client actions
+  addToCart(input: AddToCartInput!): ShoppingCartDetail!
+  likeProduct(input: LikeProductInput!): Boolean!
+  buyCart: OrderHeader!
+
+  # Notifications
+  notifyLowStock: Boolean
+
+  # Stripe Integration
+  createStripeCheckoutSession(
+    input: CreateStripeCheckoutSessionInput!
+  ): StripeCheckoutSession!
+  confirmStripePayment(input: ConfirmStripePaymentInput!): OrderPaymentResult!
+}
