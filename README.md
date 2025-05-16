@@ -1,56 +1,53 @@
 # 🧠 Nerdary Challenges - Node.js Edition
 
-Este repositorio contiene una colección de retos técnicos desarrollados durante el proceso **Nerdary** de 6 meses, enfocado en la especialización en **Node.js**. Cada desafío está diseñado para fortalecer habilidades prácticas en el desarrollo backend, siguiendo buenas prácticas de código, estructuración de proyectos y soluciones escalables.
+This repository contains a collection of technical challenges developed during the 6-month **Nerdary** program, focused on specialization in **Node.js**. Each challenge is designed to strengthen practical skills in backend development, following best practices in coding, project structure, and scalable solutions.
 
-## 🚀 Sobre el Proyecto
+## 🚀 About the Project
 
-El propósito de este repositorio es documentar y presentar las soluciones a distintos retos propuestos durante el programa. Los retos cubren aspectos como:
+The purpose of this repository is to document and showcase the solutions to various challenges proposed during the program. The challenges cover topics such as:
 
-- Diseño de APIs REST y GraphQL
-- Manipulación de datos en memoria y persistencia
-- Exportación y manejo de archivos (como CSV)
-- Paginación, filtrado, ordenamiento y operaciones CRUD
-- Uso de librerías populares del ecosistema Node.js
-- Organización modular y escalable del código
+- REST and GraphQL API design  
+- In-memory data manipulation and persistence  
+- File handling and export (e.g., CSV)  
+- Pagination, filtering, sorting, and CRUD operations  
+- Use of popular libraries in the Node.js ecosystem  
+- Modular and scalable code organization  
 
-Cada reto está encapsulado en su propia carpeta o módulo para facilitar su comprensión, revisión y ejecución independiente.
+Each challenge is encapsulated in its own folder or module to make it easy to understand, review, and run independently.
 
-## 🧰 Tecnologías Usadas
+## 🧰 Technologies Used
 
-- Node.js
-- Express
-- GraphQL (Apollo Server)
-- TypeScript
-- JavaScript moderno (ES6+)
-- Librerías auxiliares (fs, path, etc.)
+- Node.js  
+- Express  
+- GraphQL (Apollo Server)  
+- TypeScript  
+- Modern JavaScript (ES6+)  
+- Utility libraries (fs, path, etc.)
 
-## 👨‍💻 Autor
+## 👨‍💻 Author
 
-**Erick Hualla**
+**Erick Hualla**  
+Backend developer passionate about building efficient and clean solutions with Node.js. This repository reflects my active participation in the Nerdary program and my technical growth throughout the process.
 
-Desarrollador backend apasionado por construir soluciones eficientes y limpias con Node.js. Este repositorio refleja mi participación activa en el programa Nerdary y mi crecimiento técnico a lo largo del proceso.
+## 📦 Installation & Usage
 
-## 📦 Instalación y Uso
-
-1. Clona el repositorio:
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/erickhuallaravn/NerderyChallenges.git
    cd NerderyChallenges
    ```
 
-2. Instala las dependencias:
+2. Install dependencies:
 
    ```bash
    npm install
    ```
 
-3. Inicia el servidor:
+3. Start the server:
 
    ```bash
    npm run dev
    ```
 
-4. Accede a la API (por ejemplo, en http://localhost:4000/graphql)
-
----
+4. Access the API (e.g., at http://localhost:4000/graphql)
